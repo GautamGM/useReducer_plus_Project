@@ -15,7 +15,7 @@ const ContactList = () => {
   return (
     <div className="">
       <div className=" fixed w-[41%] top-[36px] flex bg-black items-center ">
-        <h1 className="text-white text-center p-2 w-[41%] top-[40px] bg-black text-[24px] font-[700] ">
+        <h1 className="text-white text-center p-2 w-[31%] top-[50px] bg-black text-[24px] font-[700] ">
           My contacts
         </h1>
         <SearchBar />
