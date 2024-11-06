@@ -1,21 +1,11 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ContactList from "./Component/Contacts/ContactList/ContactList";
-import { useState } from "react";
+import { useDeferredValue, useState } from "react";
 import ImageUploader from "./Reducers/ContactReducer.jsx";
 import SearchBar from "./Component/SearchBar/SearchBar.jsx";
+import { yupResolver } from "@hookform/resolvers/yup";
 function App() {
-  const { register, handleSubmit } = useForm({
-    
-    id: "",
-    user_name: "",
-    user_phone_number: "",
-    user_image: "",
-  });
-
-  // State for Error
-  const [error, setError] = useState({});
-
   // validation schema
   const validationSchema = yup.object({
     user_name: yup.string().required("First name is required"),
@@ -25,20 +15,36 @@ function App() {
       .matches(/^\d{10}$/, "invaild phone number")
       .required("Phone number is required"),
   });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+    defaultValues: {
+      user_name: "",
+      user_phone_number: "",
+      user_image: "",
+    },
+  });
+const[userData,setuserData]=useState([])
+  const handleAddDetail = (data) => { 
+    let newData 
+    let imageURL
+    const path=(data.user_image[0])
+   if(path){
+    imageURL= URL.createObjectURL(path)
+   }
+  if(imageURL){
+    newData={...data,id:new Date().getTime(),user_image:imageURL}
+  }else{
+    newData={...data,id:new Date().getTime(),user_image:""}
+  }
+  setuserData((prev)=>[...prev,newData])
+};
+console.log(userData,"userdata")
 
-  const handleAddDetail = async (data) => {
-    try {
-      await validationSchema.validate(data, { abortEarly: false });
-      console.log("form submitted sucesfully", data);
-    } catch (error) {
-      let newError = {};
-      console.log(error)
-      error.inner.forEach((err) => (newError[err.path] = err.message));
-      setError(newError);
-    }
-  };
-
-  console.log(error)
   return (
     <div>
       <h1 className="text-center text-[24px] font-[600]">
@@ -62,7 +68,7 @@ function App() {
                 id="userName"
                 {...register("user_name")}
               />
-              <p className="text-[red]" >{error?.user_name}</p>
+              <p className="text-[red]">{errors.user_name?.message}</p>
             </div>
             {/* ----------------------------------------- */}
             <div className="input_group border border-[#B91C1C] p-3 rounded-[10px]">
@@ -76,7 +82,7 @@ function App() {
                 id="userPhoneNumber"
                 {...register("user_phone_number")}
               />
-              <p className="text-[red]">{error?.user_phone_number}</p>
+              <p className="text-[red]">{errors.user_phone_number?.message}</p>
             </div>
             {/* ----------------------------------------- */}
             <div className="input_group border border-[#B91C1C] p-3 rounded-[10px]">
@@ -105,6 +111,10 @@ function App() {
           </div>
           <ContactList />
         </div>
+       {userData.map((data)=>{
+        const {user_image}=data
+        return <img src={user_image} alt="" />
+       })}
       </div>
       <ImageUploader />
     </div>
