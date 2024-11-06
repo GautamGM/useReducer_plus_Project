@@ -3,55 +3,91 @@ import * as yup from "yup";
 import ContactList from "./Component/Contacts/ContactList/ContactList";
 import { useState } from "react";
 import ImageUploader from "./Reducers/ContactReducer.jsx";
-
+import SearchBar from "./Component/SearchBar/SearchBar.jsx";
 function App() {
-  const userData={
-    id:null,
-    name:"",
-    phone_number:null,
-    img_src:""
-  }
-  const [value,setvalue]=useState(userData)
-const handleChange=(e)=>{
-  console.log(e.target.value,e.target.name)
-  console.log(e.target.files[0])
-}
+  const { register, handleSubmit } = useForm({
+    
+    id: "",
+    user_name: "",
+    user_phone_number: "",
+    user_image: "",
+  });
+
+  // State for Error
+  const [error, setError] = useState({});
+
+  // validation schema
+  const validationSchema = yup.object({
+    user_name: yup.string().required("First name is required"),
+    user_phone_number: yup
+      .string()
+      .required("Phoe number  is required")
+      .matches(/^\d{10}$/, "invaild phone number")
+      .required("Phone number is required"),
+  });
+
+  const handleAddDetail = async (data) => {
+    try {
+      await validationSchema.validate(data, { abortEarly: false });
+      console.log("form submitted sucesfully", data);
+    } catch (error) {
+      let newError = {};
+      console.log(error)
+      error.inner.forEach((err) => (newError[err.path] = err.message));
+      setError(newError);
+    }
+  };
+
+  console.log(error)
   return (
     <div>
-      <h1 className="text-center text-[24px] font-[600]">Practice of useReducer with contact Project</h1>
+      <h1 className="text-center text-[24px] font-[600]">
+        Practice of useReducer with contact Project
+      </h1>
       <div className="flex">
-        <form action="" className=" flex ">
+        <form
+          action=""
+          className=" flex"
+          onSubmit={handleSubmit(handleAddDetail)}
+        >
           <div className="inner_form_div ml-5 rounded-[15px] flex bg-black flex-col p-[30px]  justify-between text-white   h-[480px] borde ">
             <div className="input_group border  border-[#B91C1C] p-3 rounded-[10px]">
               <label htmlFor="userName">User Name</label>
-              <input onChange={handleChange}
+              <input
+                // value={user_name || ""}
                 className="text-black  w-full h-[35px] rounded p-2 mt-2"
                 type="text"
                 name="user_name"
                 placeholder="Enter User Name"
                 id="userName"
+                {...register("user_name")}
               />
+              <p className="text-[red]" >{error?.user_name}</p>
             </div>
             {/* ----------------------------------------- */}
             <div className="input_group border border-[#B91C1C] p-3 rounded-[10px]">
               <label htmlFor="userPhoneNumber">User Phone Number</label>
-              <input onChange={handleChange}
+              <input
+                // value={user_phone_number||""}
                 className="text-black  w-full h-[35px] rounded p-2 mt-2"
                 type="number"
                 name="user_phone_number"
                 placeholder="Enter User Phone Number"
                 id="userPhoneNumber"
+                {...register("user_phone_number")}
               />
+              <p className="text-[red]">{error?.user_phone_number}</p>
             </div>
             {/* ----------------------------------------- */}
             <div className="input_group border border-[#B91C1C] p-3 rounded-[10px]">
               <label htmlFor="userImage">User Image</label>
-              <input onChange={handleChange}
-                className="text-black  w-full h-[35px] rounded p-2 mt-2"
+              <input
+                className="text-white  w-full h-[35px] rounded p-2 mt-2"
                 type="file"
                 name="user_image"
                 placeholder="upload user Image"
                 id="userImage"
+                {...register("user_image")}
               />
             </div>
             {/* ----------------------------------------- */}
@@ -61,10 +97,16 @@ const handleChange=(e)=>{
         {/* contact List */}
 
         <div className="ml-5 w-[600px]  rounded-[15px] bg-black p-4 overflow-y-scroll h-[480px] ">
+          <div className=" fixed w-[550px] top-[36px] flex bg-black items-center ">
+            <h1 className="text-white text-center p-2  top-[50px] bg-black text-[24px] font-[700] ">
+              My contacts
+            </h1>
+            <SearchBar />
+          </div>
           <ContactList />
         </div>
       </div>
-      <ImageUploader/>
+      <ImageUploader />
     </div>
   );
 }
