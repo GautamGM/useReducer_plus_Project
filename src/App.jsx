@@ -1,20 +1,12 @@
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import ContactList from "./Component/Contacts/ContactList/ContactList";
-import { useDeferredValue, useState } from "react";
-import ImageUploader from "./Reducers/ContactReducer.jsx";
+import { useState, useEffect, useReducer } from "react";
 import SearchBar from "./Component/SearchBar/SearchBar.jsx";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./Schema/FoemSchem.jsx";
+import { useUserData } from "./Context/userContactContext.jsx";
+// import { USER_DATA } from "./Reducers/ContactReducer.jsx";
 function App() {
-  // validation schema
-  const validationSchema = yup.object({
-    user_name: yup.string().required("First name is required"),
-    user_phone_number: yup
-      .string()
-      .required("Phoe number  is required")
-      .matches(/^\d{10}$/, "invaild phone number")
-      .required("Phone number is required"),
-  });
   const {
     register,
     handleSubmit,
@@ -28,23 +20,40 @@ function App() {
       user_image: "",
     },
   });
-const[userData,setuserData]=useState([])
-  const handleAddDetail = (data) => { 
-    let newData 
-    let imageURL
-    const path=(data.user_image[0])
-   if(path){
-    imageURL= URL.createObjectURL(path)
-   }
-  if(imageURL){
-    newData={...data,id:new Date().getTime(),user_image:imageURL}
-  }else{
-    newData={...data,id:new Date().getTime(),user_image:""}
-  }
-  setuserData((prev)=>[...prev,newData])
-};
-console.log(userData,"userdata")
 
+  // REducer
+  // const [state, dispatch] = useReducer(userContactReducer, []);
+
+  // useState of sate Manegemnt
+  // usecontext +useReducer
+const {state,dispatch,USER_DATA} =useUserData()
+// --------------------
+
+  const handleAddDetail = (data) => {
+    let newData;
+    let imageURL;
+    const path = data.user_image[0];
+    if (path) {
+      imageURL = URL.createObjectURL(path);
+    }
+    if (imageURL) {
+      newData = { ...data, id: new Date().getTime(), user_image: imageURL };
+    } else {
+      newData = { ...data, id: new Date().getTime(), user_image: "" };
+    }
+    // setuserData((prev) => [...prev, newData]);
+    dispatch({ type: USER_DATA, payload: newData });
+  };
+
+  // Cleanup URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      state.forEach((imageURL) => URL.revokeObjectURL(imageURL));
+      console.log("useEffect is run");
+    };
+  }, [state]);
+
+  console.log(state,"context+useReducer----->")
   return (
     <div>
       <h1 className="text-center text-[24px] font-[600]">
@@ -109,14 +118,9 @@ console.log(userData,"userdata")
             </h1>
             <SearchBar />
           </div>
-          <ContactList />
+          <ContactList/>
         </div>
-       {userData.map((data)=>{
-        const {user_image}=data
-        return <img src={user_image} alt="" />
-       })}
       </div>
-      <ImageUploader />
     </div>
   );
 }
