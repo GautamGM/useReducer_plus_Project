@@ -22,7 +22,7 @@ const ContactList = () => {
     );
   });
 
-console.log(filterData,"filter data")
+  console.log(filterData, "filter data");
   return (
     <div className="">
       <div className="SearchBar fixed top-[40px] ml-[15rem] ">
