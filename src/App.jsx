@@ -1,16 +1,17 @@
 import { useForm } from "react-hook-form";
 import ContactList from "./Component/Contacts/ContactList/ContactList";
 import { useState, useEffect, useReducer } from "react";
-import SearchBar from "./Component/SearchBar/SearchBar.jsx";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./Schema/FoemSchem.jsx";
 import { useUserData } from "./Context/userContactContext.jsx";
+import { data } from "autoprefixer";
 // import { USER_DATA } from "./Reducers/ContactReducer.jsx";
 function App() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
@@ -43,6 +44,7 @@ const {state,dispatch,USER_DATA} =useUserData()
     }
     // setuserData((prev) => [...prev, newData]);
     dispatch({ type: USER_DATA, payload: newData });
+    reset()
   };
 
   // Cleanup URLs when component unmounts
@@ -53,7 +55,6 @@ const {state,dispatch,USER_DATA} =useUserData()
     };
   }, [state]);
 
-  console.log(state,"context+useReducer----->")
   return (
     <div>
       <h1 className="text-center text-[24px] font-[600]">
@@ -69,7 +70,7 @@ const {state,dispatch,USER_DATA} =useUserData()
             <div className="input_group border  border-[#B91C1C] p-3 rounded-[10px]">
               <label htmlFor="userName">User Name</label>
               <input
-                // value={user_name || ""}
+                
                 className="text-black  w-full h-[35px] rounded p-2 mt-2"
                 type="text"
                 name="user_name"
@@ -116,7 +117,6 @@ const {state,dispatch,USER_DATA} =useUserData()
             <h1 className="text-white text-center p-2  top-[50px] bg-black text-[24px] font-[700] ">
               My contacts
             </h1>
-            <SearchBar />
           </div>
           <ContactList/>
         </div>
