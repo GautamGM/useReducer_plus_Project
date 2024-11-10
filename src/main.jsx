@@ -4,8 +4,14 @@ import "./index.css";
 import App from "./App.jsx";
 
 import { UserDataProvider } from "./Context/userContactContext.jsx";
+import { Provider } from "react-redux";
+import store from "./ReduxToolkit/Store/ContactStore.jsx";
 createRoot(document.getElementById("root")).render(
-      <UserDataProvider>
+      <Provider store={store}>
         <App/>
-      </UserDataProvider>
+      </Provider>
 );
+
+{/* <UserDataProvider>
+        <App/>
+      </UserDataProvider> */}

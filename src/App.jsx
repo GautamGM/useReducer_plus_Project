@@ -27,7 +27,8 @@ function App() {
 
   // useState of sate Manegemnt
   // usecontext +useReducer
-const {state,dispatch,USER_DATA} =useUserData()
+
+// const {state,dispatch,USER_DATA} =useUserData()
 // --------------------
 
   const handleAddDetail = (data) => {
@@ -42,18 +43,23 @@ const {state,dispatch,USER_DATA} =useUserData()
     } else {
       newData = { ...data, id: new Date().getTime(), user_image: "" };
     }
-    // setuserData((prev) => [...prev, newData]);
-    dispatch({ type: USER_DATA, payload: newData });
-    reset()
+    // // setuserData((prev) => [...prev, newData]);
+    // dispatch({ type: USER_DATA, payload: newData });
+    // reset()
+
+    console.log("rechnage")
   };
 
+  
   // Cleanup URLs when component unmounts
-  useEffect(() => {
-    return () => {
-      state.forEach((imageURL) => URL.revokeObjectURL(imageURL));
-      console.log("useEffect is run");
-    };
-  }, [state]);
+  // useEffect(() => {
+  //   return () => {
+  //     state.forEach((imageURL) => URL.revokeObjectURL(imageURL));
+  //     console.log("useEffect is run");
+  //   };
+  // }, [state]);
+
+
 
   return (
     <div>

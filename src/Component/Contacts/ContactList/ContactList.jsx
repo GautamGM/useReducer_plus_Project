@@ -8,19 +8,22 @@ const ContactList = () => {
   // serch string
   const [searchString, setSearchString] = useState("");
 
-  const { state } = useUserData();
+  // const { state } = useUserData();
 
   // search bar fuction upplifting
   const handleChange = (e) => {
     setSearchString(e.target.value);
   };
 
-  const filterData = state.filter((data) => {
-    return (
-      data.user_name.toLowerCase().includes(searchString.toLowerCase()) ||
-      data.user_phone_number.includes(searchString)
-    );
-  });
+  // const filterData = state.filter((data) => {
+  //   return (
+  //     data.user_name.toLowerCase().includes(searchString.toLowerCase()) ||
+  //     data.user_phone_number.includes(searchString)
+  //   );
+  // });
+
+  // ----------------------------------------------------NEWCODE______________________
+   const filterData=[{}]
 
   console.log(filterData, "filter data");
   return (
