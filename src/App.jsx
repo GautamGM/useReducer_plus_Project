@@ -27,13 +27,6 @@ function App() {
     },
   });
 
-  // REducer
-  // const [state, dispatch] = useReducer(userContactReducer, []);
-
-  // useState of sate Manegemnt
-  // usecontext +useReducer
-
-// const {state,dispatch,USER_DATA} =useUserData()
 // --------------------
 
   const handleAddDetail = (data) => {
@@ -48,8 +41,7 @@ function App() {
     } else {
       newData = { ...data, id: new Date().getTime(), user_image: "" };
     }
-    // // setuserData((prev) => [...prev, newData]);
-    // dispatch({ type: USER_DATA, payload: newData });
+
     dispatch(addContact(newData))
     reset()
 

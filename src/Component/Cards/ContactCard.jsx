@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
 import { removeContact } from "../../ReduxToolkit/Store/ContactStore";
+
+
 const ContactCard = ({ data }) => {
     const dispatch=useDispatch()
   const { user_name, user_phone_number, user_image,id } = data;
-  console.log(id)
-
 //   Delete-Contact
 const handleDelete=(id)=>{
     dispatch(removeContact(id))
