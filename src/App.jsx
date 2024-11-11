@@ -4,9 +4,14 @@ import { useState, useEffect, useReducer } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./Schema/FoemSchem.jsx";
 import { useUserData } from "./Context/userContactContext.jsx";
-import { data } from "autoprefixer";
+import { useDispatch,useSelector } from "react-redux";
+import { addContact } from "./ReduxToolkit/Store/ContactStore.jsx";
 // import { USER_DATA } from "./Reducers/ContactReducer.jsx";
 function App() {
+  // useDispacth
+  const dispatch=useDispatch()
+
+
   const {
     register,
     handleSubmit,
@@ -45,12 +50,11 @@ function App() {
     }
     // // setuserData((prev) => [...prev, newData]);
     // dispatch({ type: USER_DATA, payload: newData });
-    // reset()
+    dispatch(addContact(newData))
+    reset()
 
-    console.log("rechnage")
+   
   };
-
-  
   // Cleanup URLs when component unmounts
   // useEffect(() => {
   //   return () => {

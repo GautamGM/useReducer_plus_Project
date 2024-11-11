@@ -1,11 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { contactReducer,addContact } from "../Slice/ContactSlic";
-import { string } from "yup";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { contactReducer,addContact,removeContact } from "../Slice/ContactSlic";
+
+// reducer of the contact
+const rootReducer=combineReducers({
+    contact:contactReducer
+})
+// configure the store of contact
 const store=configureStore({
-    reducer:{
-        contacts:contactReducer
-    }
+    reducer:rootReducer
 })
 
-export default store
- console.log(store.getState(),"store")
+export {store,addContact,removeContact}
+
+
+
+ 

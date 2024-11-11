@@ -5,7 +5,7 @@ import App from "./App.jsx";
 
 import { UserDataProvider } from "./Context/userContactContext.jsx";
 import { Provider } from "react-redux";
-import store from "./ReduxToolkit/Store/ContactStore.jsx";
+import {store} from "./ReduxToolkit/Store/ContactStore.jsx";
 createRoot(document.getElementById("root")).render(
       <Provider store={store}>
         <App/>
