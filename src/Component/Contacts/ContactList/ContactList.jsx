@@ -5,6 +5,8 @@ import { useUserData } from "../../../Context/userContactContext";
 import { useState } from "react";
 import { set } from "react-hook-form";
 import { useSelector } from "react-redux";
+import searchBarFn from "../../../GlobalFunction/SearchBar";
+
 const ContactList = () => {
   // serch string
   const [searchString, setSearchString] = useState("");
@@ -16,18 +18,15 @@ const ContactList = () => {
     setSearchString(e.target.value);
   };
 
-  const contactData=useSelector((state)=>{
-    return state.contact
-   })
-  const filterData = contactData.filter((data) => {
-    return (
-      data.user_name.toLowerCase().includes(searchString.toLowerCase()) ||
-      data.user_phone_number.includes(searchString)
-    );
+  const contactData = useSelector((state) => {
+    return state.contact;
   });
 
+// search bar function----> Gloabl function --->
+  const filterData = searchBarFn(contactData, searchString);
+
   // ----------------------------------------------------NEWCODE______________________
-   
+
   return (
     <div className="">
       <div className="SearchBar fixed top-[40px] ml-[15rem] ">
