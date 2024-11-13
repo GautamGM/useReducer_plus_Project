@@ -10,4 +10,5 @@ const SearchBar = ({handleChange}) => {
     </div>
   );
 };
-export default SearchBar;
+// export default SearchBar;
+export {SearchBar};
